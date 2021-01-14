@@ -1,5 +1,6 @@
 (ns auction.service.items
   (:require
+    [auction.service.sse :as sse]
     [auction.util :as util]
     [clojure.java.io :as io])
   (:import
@@ -13,9 +14,9 @@
   (locking count-lock
     (format "f%03d." (count (.list pics)))))
 
-(def items (atom [{:title "Dress"
-                   :src "/img/dress.jpg"
-                   :price 100}]))
+(defonce items (atom [{:title "Dress"
+                       :src "/img/dress.jpg"
+                       :price 100}]))
 
 (defn add-item [title {:keys [filename tempfile content-type]} price]
   (let [src (str (fname) (last (.split filename "\\.")))]
@@ -41,4 +42,11 @@
                           (or bids [])
                           {:name name :price (+ price increment)})]
                (assoc-in items [i :bids] bids))
-             items))))
+             items)))
+  (sse/send! "panel"))
+
+(defn safe-pop [v]
+  (if (empty? v) v (pop v)))
+(defn unbid [i]
+  (swap! items update-in [i :bids] safe-pop)
+  (sse/send! "panel"))
