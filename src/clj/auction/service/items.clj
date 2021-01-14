@@ -13,7 +13,9 @@
   (locking count-lock
     (format "f%03d." (count (.list pics)))))
 
-(defonce items (atom []))
+(def items (atom [{:title "Dress"
+                   :src "/img/dress.jpg"
+                   :price 100}]))
 
 (defn add-item [title {:keys [filename tempfile content-type]} price]
   (let [src (str (fname) (last (.split filename "\\.")))]
