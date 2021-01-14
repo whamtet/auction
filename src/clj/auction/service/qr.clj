@@ -1,5 +1,6 @@
 (ns auction.service.qr
   (:require
+    [auction.util :as util]
     [clojure.java.io :as io])
   (:import
     net.glxn.qrgen.javase.QRCode))
@@ -9,7 +10,8 @@
   {:qr (.file (QRCode/from (str endpoint password)))
    :password password})
 
-(def password (atom (s-password "")))
+(def password
+  (atom (s-password (util/rand-string 5))))
 
 (defn set-password [pass]
   (reset! password (s-password pass)))
