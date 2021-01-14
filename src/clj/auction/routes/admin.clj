@@ -51,21 +51,24 @@
   (let [src (if content-type
               (format "/api/img?src=%s&content-type=%s" src content-type)
               src)
-        bids (if bids
-               (for [{:keys [name price]} (take-last 3 bids)]
-                 [:div name " " price])
-               price)]
+        bids-div
+        (if bids
+          (for [{:keys [name price]} (take-last 3 bids)]
+            [:div name " " price])
+          price)]
     [:div.card {:style "width: 18rem;"}
      [:img.card-img-top.img-thumbnail {:src src}]
      [:div.card-body
       [:h5.card-title title]
-      [:div.card-text bids]
-      [:button.btn.btn-primary.mt-2
-       {:hx-patch "items"
-        :hx-target (hash "../..")
-        :hx-vals (util/write-str
-                   {(path "../../i") i})}
-       "Delete bid"] [:br]
+      [:div.card-text bids-div]
+      (when bids
+        (list
+          [:button.btn.btn-primary.mt-2
+           {:hx-patch "items"
+            :hx-target (hash "../..")
+            :hx-vals (util/write-str
+                       {(path "../../i") i})}
+           "Delete bid"] [:br]))
       [:button.btn.btn-primary.mt-2
        {:hx-confirm (format "Delete %s?" title)
         :hx-delete "items"

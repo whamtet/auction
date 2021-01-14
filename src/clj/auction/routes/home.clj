@@ -9,4 +9,4 @@
     (fn [req]
       (render/html5-response
         [:div.container
-         [:h1 "Please scan barcode"]]))))
+         [:h1 "Please scan QR Code"]]))))

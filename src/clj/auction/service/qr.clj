@@ -1,20 +1,25 @@
 (ns auction.service.qr
   (:require
+    [auction.config :refer [env]]
     [auction.util :as util]
     [clojure.java.io :as io]
     [clojure.java.shell :refer [sh]])
   (:import
     net.glxn.qrgen.javase.QRCode))
 
-(def server
-  #_(->> "ifconfig"
+(defn server []
+  (if (:dev env)
+    (str
+      "http://"
+      (->> "ifconfig"
          sh
          :out
-         (re-find #"192.168\S+")))
+         (re-find #"192.168\S+"))
+      ":3000/login?code=")
+    "https://whamtet-auction.herokuapp.com/login?code="))
 
-(def endpoint (str "http://" server ":3000/login?code="))
 (defn- s-password [password]
-  {:qr (.file (QRCode/from (str endpoint password)))
+  {:qr (.file (QRCode/from (str (server) password)))
    :password password})
 
 (def password
