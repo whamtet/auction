@@ -85,7 +85,8 @@
         (-> "i" value rt/parse-int items/remove-item))
       (when patch?
         (-> "i" value rt/parse-int items/unbid))
-      [:div {:id id}
+      [:div {:id id :hx-sse "connect:/api/sse"}
+       [:div {:hx-get "items" :hx-target (hash ".") :hx-trigger "sse:panel"}]
        [:h1 "Items"]
        (rt/map-indexed item req (items/get-items))
        [:hr]
