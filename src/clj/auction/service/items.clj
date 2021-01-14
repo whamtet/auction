@@ -30,3 +30,15 @@
 
 (defn remove-item [i]
   (swap! items util/dissoc-i i))
+
+(def increment 5)
+(defn bid [i name]
+  (swap! items
+         (fn [items]
+           (if-let [{:keys [bids price]} (get items i)]
+             (let [price (or (-> bids peek :price) price)
+                   bids (conj
+                          (or bids [])
+                          {:name name :price (+ price increment)})]
+               (assoc-in items [i :bids] bids))
+             items))))
