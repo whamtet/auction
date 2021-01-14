@@ -6,11 +6,11 @@
   (:import
     net.glxn.qrgen.javase.QRCode))
 
-(->> "ifconfig"
-    sh
-    :out
-    (re-find #"192.168\S+")
-    (def server))
+(def server
+  #_(->> "ifconfig"
+         sh
+         :out
+         (re-find #"192.168\S+")))
 
 (def endpoint (str "http://" server ":3000/login?code="))
 (defn- s-password [password]
