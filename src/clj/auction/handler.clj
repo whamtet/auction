@@ -5,6 +5,7 @@
     [auction.routes.admin :refer [admin-routes]]
     [auction.routes.api :refer [api-routes]]
     [auction.routes.home :refer [home-routes]]
+    [auction.routes.login :refer [login-routes]]
     [reitit.ring :as ring]
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.webjars :refer [wrap-webjars]]
@@ -21,7 +22,8 @@
     (ring/router
       [(admin-routes)
        (api-routes)
-       (home-routes)])
+       (home-routes)
+       (login-routes)])
     (ring/routes
       (ring/create-resource-handler
         {:path "/"})

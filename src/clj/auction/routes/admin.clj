@@ -9,17 +9,16 @@
   (ctmx/with-req req
     (when (and post? (= username "whamtet"))
       (qr/set-password password))
-    (let [response-span
-          (when post?
-            (if (= username "whamtet")
-              [:span#response.badge.badge-success "Success"]
-              [:span#response.badge.badge-danger "Wrong Username"]))]
-      [:form.mt-3 {:id id :hx-post "form"}
-       [:label.mr-2 "Username"]
-       [:input {:type "text" :name (path "username") :placeholder "Username"}] [:br]
-       [:label.mr-2 "Password"]
-       [:input {:type "password" :name (path "password")}] [:br]
-       [:input.mr-2 {:type "submit"}] response-span])))
+    [:form.mt-3 {:id id :hx-post "form"}
+     [:label.mr-2 "Username"]
+     [:input {:type "text" :name (path "username") :placeholder "Username"}] [:br]
+     [:label.mr-2 "Password"]
+     [:input {:type "password" :name (path "password")}] [:br]
+     [:input.mr-2 {:type "submit"}]
+     (when post?
+       (if (= username "whamtet")
+         [:span.badge.badge-success "Success"]
+         [:span.badge.badge-danger "Wrong Username"]))]))
 
 (defn admin-routes []
   (ctmx/make-routes
