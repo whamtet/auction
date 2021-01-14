@@ -3,13 +3,16 @@
     [auction.render :as render]
     [auction.service.qr :as qr]
     [auction.service.users :as users]
-    [ctmx.core :as ctmx]))
+    [ctmx.core :as ctmx]
+    [ctmx.response :as response]))
 
 (ctmx/defcomponent ^:endpoint username-prompt [req username]
   (ctmx/with-req req
     (if (-> "/code" value qr/password-match?)
       (if (and post? (users/add-user username))
-        "fuck"
+        (assoc
+          (response/hx-redirect "/notice")
+          :session {:username username})
         [:form {:id id :hx-post "username-prompt"}
          [:h3 "Please choose a username"]
          [:input {:type "hidden" :name "code" :value (value "/code")}]

@@ -1,11 +1,18 @@
 (ns auction.service.qr
   (:require
     [auction.util :as util]
-    [clojure.java.io :as io])
+    [clojure.java.io :as io]
+    [clojure.java.shell :refer [sh]])
   (:import
     net.glxn.qrgen.javase.QRCode))
 
-(def endpoint "http://localhost:3000/login?code=")
+(->> "ifconfig"
+    sh
+    :out
+    (re-find #"192.168\S+")
+    (def server))
+
+(def endpoint (str "http://" server ":3000/login?code="))
 (defn- s-password [password]
   {:qr (.file (QRCode/from (str endpoint password)))
    :password password})

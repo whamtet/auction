@@ -7,7 +7,6 @@
   (ctmx/make-routes
     "/"
     (fn [req]
-      (->
+      (render/html5-response
         [:div.container
-         [:h1 "Please scan barcode"]]
-        render/html5-response))))
+         [:h1 "Please scan barcode"]]))))
