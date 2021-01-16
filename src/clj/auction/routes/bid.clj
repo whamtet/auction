@@ -1,6 +1,7 @@
 (ns auction.routes.bid
   (:require
     [auction.render :as render]
+    [auction.service.auction :as auction]
     [auction.service.items :as items]
     [auction.util :as util]
     [ctmx.core :as ctmx]
@@ -23,6 +24,7 @@
       [:div.card-text bids]
       [:button.btn.btn-primary.mt-2
        {:hx-post "panel"
+        :disabled (not (auction/bidding?))
         :hx-target (hash "../..")
         :hx-vals (util/write-str
                    {(path "../../i") i})}

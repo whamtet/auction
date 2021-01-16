@@ -1,6 +1,7 @@
 (ns auction.routes.admin
   (:require
     [auction.render :as render]
+    [auction.service.auction :as auction]
     [auction.service.items :as items]
     [auction.service.qr :as qr]
     [auction.util :as util]
@@ -28,6 +29,14 @@
        [:input.mr-2 {:type "submit"}]
        (when post?
          [:span.badge.badge-danger "Wrong username or password"])])))
+
+(ctmx/defcomponent ^:endpoint start-stop [req]
+  (ctmx/with-req req
+    (when post? (auction/toggle-bid))
+    [:div {:id id}
+     [:button.btn.btn-primary.mt-2
+      {:hx-post "start-stop" :hx-target (hash ".")}
+      (if (auction/bidding?) "Stop" "Start")]]))
 
 (ctmx/defcomponent ^:endpoint qr-code-form [req password]
   (ctmx/with-req req
@@ -120,6 +129,7 @@
         {:hx-delete "panel"}
         "Logout"]
        [:br] [:br]
+       (start-stop req)
        (qr-code-form req "")
        [:hr]
        (items req "" nil nil)])))
