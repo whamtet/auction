@@ -2,6 +2,7 @@
   (:require
     [auction.handler :as handler]
     [auction.nrepl :as nrepl]
+    [auction.service.qr :as qr]
     [luminus.http-server :as http]
     [auction.config :refer [env]]
     [clojure.tools.cli :refer [parse-opts]]
@@ -55,4 +56,5 @@
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
-  (start-app args))
+  (start-app args)
+  (qr/set-password))

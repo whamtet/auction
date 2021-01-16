@@ -2,12 +2,16 @@
   (:require
     [org.httpkit.server :as httpkit]))
 
-(defonce connections (atom #{}))
-(defn add-connection [connection]
-  (swap! connections conj connection))
-(defn remove-connection [connection]
-  (swap! connections disj connection))
+(defonce connections (atom {}))
 
-(defn send! [msg]
-  (doseq [connection @connections]
-    (httpkit/send! connection (str "event: " msg "\ndata: \n\n") false)))
+(defn- safe-conj [s v]
+  (conj (or s #{}) v))
+(defn add-connection [page connection]
+  (swap! connections update page safe-conj connection))
+(defn remove-connection [page connection]
+  (swap! connections update page disj connection))
+
+(defn send! [& msgs]
+  (doseq [msg msgs
+          connection (@connections msg)]
+    (httpkit/send! connection (str "event: update\ndata: \n\n") false)))

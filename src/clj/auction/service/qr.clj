@@ -12,9 +12,9 @@
     (str
       "http://"
       (->> "ifconfig"
-         sh
-         :out
-         (re-find #"192.168\S+"))
+           sh
+           :out
+           (re-find #"192.168\S+"))
       ":3000/login?code=")
     "https://whamtet-auction.herokuapp.com/login?code="))
 
@@ -22,11 +22,12 @@
   {:qr (.file (QRCode/from (str (server) password)))
    :password password})
 
-(def password
-  (atom (s-password (util/rand-string 5))))
+(def password (atom nil))
 
-(defn set-password [pass]
-  (reset! password (s-password pass)))
+(defn set-password
+  ([] (set-password (util/rand-string 5)))
+  ([pass]
+   (reset! password (s-password pass))))
 
 (defn input-stream []
   (-> @password :qr io/input-stream))

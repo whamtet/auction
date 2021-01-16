@@ -22,7 +22,7 @@
   (let [src (str (fname) (last (.split filename "\\.")))]
     (io/copy tempfile (File. pics src))
     (swap! items conj (util/kw title src price content-type))
-    nil))
+    (sse/send! "bid")))
 (defn get-items [] @items)
 
 (defn input-stream [src]
@@ -30,7 +30,8 @@
     (File. pics src)))
 
 (defn remove-item [i]
-  (swap! items util/dissoc-i i))
+  (swap! items util/dissoc-i i)
+  (sse/send! "bid"))
 
 (def increment 5)
 (defn bid [i name]
@@ -43,10 +44,10 @@
                           {:name name :price (+ price increment)})]
                (assoc-in items [i :bids] bids))
              items)))
-  (sse/send! "panel"))
+  (sse/send! "bid" "admin"))
 
-(defn safe-pop [v]
+(defn- safe-pop [v]
   (if (empty? v) v (pop v)))
 (defn unbid [i]
   (swap! items update-in [i :bids] safe-pop)
-  (sse/send! "panel"))
+  (sse/send! "bid"))

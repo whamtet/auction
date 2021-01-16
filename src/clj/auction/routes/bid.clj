@@ -33,8 +33,8 @@
     (let [{:keys [username]} session]
       (when (and post? username)
         (-> "i" value rt/parse-int (items/bid username)))
-      [:div {:id id :hx-sse "connect:/api/sse"}
-       [:div {:hx-get "panel" :hx-target (hash ".") :hx-trigger "sse:panel"}]
+      [:div {:id id}
+       [:div {:hx-get "panel" :hx-target (hash ".") :hx-trigger "sse:update"}]
        [:h3.my-2 "Welcome " username]
        (rt/map-indexed item req (items/get-items))])))
 
@@ -45,6 +45,6 @@
       (ctmx/with-req req
         (if (:username session)
           (render/html5-response
-            [:div.container
+            [:div.container {:hx-sse "connect:/api/sse?page=bid"}
              (panel req)])
           (response/redirect "/"))))))

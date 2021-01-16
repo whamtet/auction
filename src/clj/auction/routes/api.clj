@@ -23,15 +23,16 @@
      :body ""}))
 
 (defn sse [req]
-  (httpkit/with-channel req channel
-    (httpkit/send!
-      channel
-      {:status 200
-       :headers {"Content-Type" "text/event-stream"
-                 "Cache-Control" "no-cache"}}
-      false)
-    (sse/add-connection channel)
-    (httpkit/on-close channel (fn [_] (sse/remove-connection channel)))))
+  (let [page (-> req :params :page)]
+    (httpkit/with-channel req channel
+      (httpkit/send!
+        channel
+        {:status 200
+         :headers {"Content-Type" "text/event-stream"
+                   "Cache-Control" "no-cache"}}
+        false)
+      (sse/add-connection page channel)
+      (httpkit/on-close channel (fn [_] (sse/remove-connection page channel))))))
 
 (defn pprint [s]
   (with-out-str

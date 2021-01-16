@@ -77,7 +77,7 @@
                    {(path "../../i") i})}
        "Delete item"]]]))
 
-(ctmx/defcomponent ^:endpoint items [req title img price]
+(ctmx/defcomponent ^:endpoint items [req title img ^:float price]
   (ctmx/with-req req
     (when (:admin session)
       (when post? (items/add-item title img price))
@@ -85,8 +85,8 @@
         (-> "i" value rt/parse-int items/remove-item))
       (when patch?
         (-> "i" value rt/parse-int items/unbid))
-      [:div {:id id :hx-sse "connect:/api/sse"}
-       [:div {:hx-get "items" :hx-target (hash ".") :hx-trigger "sse:panel"}]
+      [:div {:id id}
+       [:div {:hx-get "items" :hx-target (hash ".") :hx-trigger "sse:update"}]
        [:h1 "Items"]
        (rt/map-indexed item req (items/get-items))
        [:hr]
@@ -135,5 +135,5 @@
     "/admin"
     (fn [req]
       (render/html5-response
-        [:div.container
+        [:div.container {:hx-sse "connect:/api/sse?page=admin"}
          (page req)]))))
