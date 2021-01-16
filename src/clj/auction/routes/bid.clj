@@ -16,7 +16,8 @@
         bids (if bids
                (for [{:keys [name price]} (take-last 3 bids)]
                  [:div name " " price])
-               price)]
+               price)
+        bidding? (auction/bidding?)]
     [:div.card {:style "width: 18rem;"}
      [:img.card-img-top.img-thumbnail {:src src}]
      [:div.card-body
@@ -24,11 +25,14 @@
       [:div.card-text bids]
       [:button.btn.btn-primary.mt-2
        {:hx-post "panel"
-        :disabled (not (auction/bidding?))
         :hx-target (hash "../..")
         :hx-vals (util/write-str
-                   {(path "../../i") i})}
-       "Bid " (+ last-price items/increment)]]]))
+                   {(path "../../i") i})
+        :disabled (not bidding?)}
+       (if bidding?
+         (str
+           "Bid " (+ last-price items/increment))
+         "Bidding paused")]]]))
 
 (ctmx/defcomponent ^:endpoint panel [req]
   (ctmx/with-req req
