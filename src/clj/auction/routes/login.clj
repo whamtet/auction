@@ -16,7 +16,7 @@
         [:form {:id id :hx-post "username-prompt"}
          [:h3 "Please choose a username"]
          [:input {:type "hidden" :name "code" :value (value "/code")}]
-         [:input.my-2 {:type "text" :name (path "username") :placeholder "Username"}] [:br]
+         [:input.my-2 {:type "text" :name "username" :placeholder "Username"}] [:br]
          [:input {:type "submit"}] [:br]
          (when post? [:span.badge.badge-warning "Username taken.  Please choose another"])])
       [:div "Invalid code"])))

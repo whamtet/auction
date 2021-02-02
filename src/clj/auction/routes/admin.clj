@@ -20,12 +20,12 @@
       [:form.mt-3 {:id id :hx-post "login-form"}
        [:label.mr-2 "Username"]
        [:input {:type "text"
-                :name (path "username")
-                :value (value "username")
+                :name "username"
+                :value username
                 :placeholder "Username"}] [:br]
        [:label.mr-2 "Password"]
        [:input {:type "password"
-                :name (path "password")}] [:br]
+                :name "password"}] [:br]
        [:input.mr-2 {:type "submit"}]
        (when post?
          [:span.badge.badge-danger "Wrong username or password"])])))
@@ -45,7 +45,7 @@
         (qr/set-password password))
       [:form.mt-3 {:id id :hx-post "qr-code-form"}
        [:input.mr-2 {:type "text"
-                     :name (path "password")
+                     :name "password"
                      :placeholder "QR Password"
                      :required true}]
        [:input.mr-2 {:type "submit" :value "Update"}]
@@ -104,17 +104,17 @@
                :hx-encoding "multipart/form-data"
                :hx-target (hash ".")}
         [:input {:type "text"
-                 :name (path "title")
+                 :name "title"
                  :value title
                  :placeholder "Title"
                  :required true}] [:br]
         [:label.mr-2.my-2 "Image"]
         [:input {:type "file"
-                 :name (path "img")
+                 :name "img"
                  :accept "image/*"
                  :required true}] [:br]
         [:input {:type "number"
-                 :name (path "price")
+                 :name "price"
                  :value price
                  :placeholder "Price"
                  :required true}] [:br]
