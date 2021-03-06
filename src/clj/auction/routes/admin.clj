@@ -10,7 +10,7 @@
     [ctmx.rt :as rt]))
 
 (defn valid-login? [username password]
-  (= ["whamtet" "getmein"]
+  (= ["admin" "rummikub"]
      [username password]))
 
 (ctmx/defcomponent ^:endpoint login-form [req username password]
