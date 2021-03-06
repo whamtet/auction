@@ -8,8 +8,8 @@
     [muuntaja.middleware :refer [wrap-format wrap-params]]
     [auction.config :refer [env]]
     [ring-ttl-session.core :refer [ttl-memory-store]]
-    [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
-  )
+    [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
+    [ring.util.response :as response]))
 
 (defn wrap-internal-error [handler]
   (fn [req]
