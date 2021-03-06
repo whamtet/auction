@@ -18,6 +18,7 @@
     (if (and post? (valid-login? username password))
       (assoc response/hx-refresh :session {:admin true})
       [:form.mt-3 {:id id :hx-post "login-form"}
+       [:h2.mb-3 "Admin Login"]
        [:label.mr-2 "Username"]
        [:input {:type "text"
                 :name "username"
@@ -36,7 +37,7 @@
     [:div {:id id}
      [:button.btn.btn-primary.mt-2
       {:hx-post "start-stop" :hx-target (hash ".")}
-      (if (auction/bidding?) "Stop" "Start")]]))
+      (if (auction/bidding?) "Stop Bidding" "Start Bidding")]]))
 
 (ctmx/defcomponent ^:endpoint qr-code-form [req password]
   (ctmx/with-req req
@@ -54,7 +55,8 @@
        [:div.my-2
         [:a {:href src :target "_blank"}
          [:img.img-thumbnail
-          {:src src}]]]])))
+          {:src src}]]
+        [:b.ml-5 "Scan this code with mobile device"]]])))
 
 (ctmx/defcomponent item [req i {:keys [title src content-type bids price]}]
   (let [src (if content-type
