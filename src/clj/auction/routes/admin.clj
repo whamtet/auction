@@ -18,15 +18,20 @@
     (if (and post? (valid-login? username password))
       (assoc response/hx-refresh :session {:admin true})
       [:form.mt-3 {:id id :hx-post "login-form"}
-       [:h2.mb-3 "Admin Login"]
-       [:label.mr-2 "Username"]
-       [:input {:type "text"
-                :name "username"
-                :value username
-                :placeholder "Username"}] [:br]
-       [:label.mr-2 "Password"]
-       [:input {:type "password"
-                :name "password"}] [:br]
+       [:h2 "Admin Login"]
+       [:h6.my-3 "Built with " [:a {:href "https://ctmx.info" :target "_blank"} "CTMX"] ". Light, fast, secure"]
+       [:div.row.mb-2
+        [:label.col-2 "Username"]
+        [:input.col-2 {:type "text"
+                       :name "username"
+                       :value username
+                       :required true
+                       :placeholder "Username"}]]
+       [:div.row.mb-2
+        [:label.col-2 "Password"]
+        [:input.col-2 {:type "password"
+                       :name "password"
+                       :required true}]]
        [:input.mr-2 {:type "submit"}]
        (when post?
          [:span.badge.badge-danger "Wrong username or password"])])))

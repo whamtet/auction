@@ -37,10 +37,17 @@
       ;; since they're not compatible with this middleware
       ((if (:websocket? request) handler wrapped) request))))
 
+(defn redirect-http [handler]
+  (fn [req]
+    (if-let [url (and (-> req :headers (get "x-forwarded-proto") (= "http")) (:url env))]
+      (response/redirect url)
+      (handler req))))
+
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
       (wrap-defaults
         (-> site-defaults
             (assoc-in [:security :anti-forgery] false)
             (assoc-in  [:session :store] (ttl-memory-store (* 60 30)))))
+      redirect-http
       wrap-internal-error))
