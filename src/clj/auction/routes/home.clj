@@ -1,12 +1,13 @@
 (ns auction.routes.home
   (:require
     [auction.render :as render]
-    [ctmx.core :as ctmx]))
+    [simpleui.core :as simpleui]))
 
 (defn home-routes []
-  (ctmx/make-routes
+  (simpleui/make-routes
     "/"
     (fn [req]
       (render/html5-response
         [:div.container
-         [:h1 "Please scan QR Code"]]))))
+         [:h1 "Please scan QR Code"]
+         [:h5 "Your event organizer will provide this"]]))))

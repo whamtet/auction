@@ -4,7 +4,7 @@
     [auction.service.qr :as qr]
     [auction.service.sse :as sse]
     clojure.pprint
-    [ctmx.render :as render]
+    [simpleui.render :as render]
     [org.httpkit.server :as httpkit]))
 
 (defn item-img [req]

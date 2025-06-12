@@ -18,3 +18,11 @@
     (assoc v i nil)
     (filter identity)
     vec))
+
+(defmacro with-req [req & body]
+  (assert (symbol? req))
+  `(let [{:keys [~'session]} ~req
+         ~'post? (-> ~req :request-method (= :post))
+         ~'patch? (-> ~req :request-method (= :patch))
+         ~'delete? (-> ~req :request-method (= :delete))]
+    ~@body))

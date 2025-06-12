@@ -1,10 +1,10 @@
 (ns auction.routes.notice
   (:require
     [auction.render :as render]
-    [ctmx.core :as ctmx]))
+    [simpleui.core :as simpleui]))
 
 (defn notice-routes []
-  (ctmx/make-routes
+  (simpleui/make-routes
     "/notice"
     (fn [req]
       (render/html5-response

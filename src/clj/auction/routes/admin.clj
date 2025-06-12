@@ -5,21 +5,21 @@
     [auction.service.items :as items]
     [auction.service.qr :as qr]
     [auction.util :as util]
-    [ctmx.core :as ctmx]
-    [ctmx.response :as response]
-    [ctmx.rt :as rt]))
+    [simpleui.core :as simpleui]
+    [simpleui.response :as response]
+    [simpleui.rt :as rt]))
 
 (defn valid-login? [username password]
   (= ["admin" "rummikub"]
      [username password]))
 
-(ctmx/defcomponent ^:endpoint login-form [req username password]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint login-form [req username password]
+  (util/with-req req
     (if (and post? (valid-login? username password))
       (assoc response/hx-refresh :session {:admin true})
       [:form.mt-3 {:id id :hx-post "login-form"}
        [:h2 "Admin Login"]
-       [:h6.my-3 "Built with " [:a {:href "https://ctmx.info" :target "_blank"} "CTMX"] ". Light, fast, secure"]
+       [:h6.my-3 "Built with " [:a {:href "https://simpleui.io" :target "_blank"} "SimpleUI"] ". Light, fast, secure"]
        [:div.row.mb-2
         [:label.col-2 "Username"]
         [:input.col-2 {:type "text"
@@ -36,16 +36,16 @@
        (when post?
          [:span.badge.badge-danger "Wrong username or password"])])))
 
-(ctmx/defcomponent ^:endpoint start-stop [req]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint start-stop [req]
+  (util/with-req req
     (when post? (auction/toggle-bid))
     [:div {:id id}
      [:button.btn.btn-primary.mt-2
       {:hx-post "start-stop" :hx-target (hash ".")}
       (if (auction/bidding?) "Stop Bidding" "Start Bidding")]]))
 
-(ctmx/defcomponent ^:endpoint qr-code-form [req password]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint qr-code-form [req password]
+  (util/with-req req
     (let [src (str "/api/qr?password=" password)]
       (when (and post? (:admin session))
         (qr/set-password password))
@@ -63,7 +63,7 @@
           {:src src}]]
         [:b.ml-5 "Scan this code with mobile device"]]])))
 
-(ctmx/defcomponent item [req i {:keys [title src content-type bids price]}]
+(simpleui/defcomponent item [req i {:keys [title src content-type bids price]}]
   (let [src (if content-type
               (format "/api/img?src=%s&content-type=%s" src content-type)
               src)
@@ -93,14 +93,14 @@
                    {(path "../../i") i})}
        "Delete item"]]]))
 
-(ctmx/defcomponent ^:endpoint items [req title img ^:float price]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint items [req title img ^:float price]
+  (util/with-req req
     (when (:admin session)
       (when post? (items/add-item title img price))
       (when delete?
-        (-> "i" value rt/parse-int items/remove-item))
+        (-> "i" value rt/parse-long items/remove-item))
       (when patch?
-        (-> "i" value rt/parse-int items/unbid))
+        (-> "i" value rt/parse-long items/unbid))
       [:div {:id id}
        [:div {:hx-get "items" :hx-target (hash ".") :hx-trigger "sse:update"}]
        [:h1 "Items"]
@@ -127,8 +127,8 @@
                  :required true}] [:br]
         [:input.mt-2 {:type "submit"}]]])))
 
-(ctmx/defcomponent ^:endpoint panel [req]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint panel [req]
+  (util/with-req req
     (if delete?
       (assoc response/hx-refresh :session nil)
       [:div {:id id}
@@ -141,14 +141,14 @@
        [:hr]
        (items req "" nil nil)])))
 
-(ctmx/defcomponent page [req]
-  (ctmx/with-req req
+(simpleui/defcomponent page [req]
+  (util/with-req req
     (if (:admin session)
       (panel req)
       (login-form req "" ""))))
 
 (defn admin-routes []
-  (ctmx/make-routes
+  (simpleui/make-routes
     "/admin"
     (fn [req]
       (render/html5-response

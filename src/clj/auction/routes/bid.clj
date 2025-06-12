@@ -4,11 +4,11 @@
     [auction.service.auction :as auction]
     [auction.service.items :as items]
     [auction.util :as util]
-    [ctmx.core :as ctmx]
-    [ctmx.rt :as rt]
+    [simpleui.core :as simpleui :refer [defcomponent]]
+    [simpleui.rt :as rt]
     [ring.util.response :as response]))
 
-(ctmx/defcomponent item [req i {:keys [title src content-type bids price]}]
+(defcomponent item [req i {:keys [title src content-type bids price]}]
   (let [src (if content-type
               (format "/api/img?src=%s&content-type=%s" src content-type)
               src)
@@ -34,21 +34,21 @@
            "Bid " (+ last-price items/increment))
          "Bidding paused")]]]))
 
-(ctmx/defcomponent ^:endpoint panel [req]
-  (ctmx/with-req req
+(defcomponent ^:endpoint panel [req]
+  (util/with-req req
     (let [{:keys [username]} session]
       (when (and post? username)
-        (-> "i" value rt/parse-int (items/bid username)))
+        (-> "i" value rt/parse-long (items/bid username)))
       [:div {:id id}
        [:div {:hx-get "panel" :hx-target (hash ".") :hx-trigger "sse:update"}]
        [:h3.my-2 "Welcome " username]
        (rt/map-indexed item req (items/get-items))])))
 
 (defn bid-routes []
-  (ctmx/make-routes
+  (simpleui/make-routes
     "/bid"
     (fn [req]
-      (ctmx/with-req req
+      (util/with-req req
         (if (:username session)
           (render/html5-response
             [:div.container {:hx-sse "connect:/api/sse?page=bid"}

@@ -29,7 +29,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [selmer "1.12.31"]
                  ;; my deps
-                 [ctmx "0.1.0-SNAPSHOT"]
+                 [io.simpleui/simpleui "1.6.2"]
                  [com.github.kenglxn.qrgen/javase "2.6.0"]]
 
   :min-lein-version "2.0.0"

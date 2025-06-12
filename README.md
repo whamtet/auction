@@ -1,12 +1,10 @@
 # auction
 
-A basic auction app with QR Authentication.  This app provides a good demonstration of [ctmx](https://github.com/whamtet/ctmx).
-
-[Live Version](https://whamtet-auction.herokuapp.com/).
+A basic auction app with QR Authentication.  This app provides a good demonstration of [SimpleUI](https://github.com/whamtet/simpleui).
 
 ## Usage
 
-First log in as admin [here](https://whamtet-auction.herokuapp.com/) with username whamtet, password getmein.  Upload any items you wish to auction off.  Once you're ready, show bidders the QR code and they will be prompted to enter a username.  Bidding can begin.
+First log in as admin [here](https://auction.simpleui.io/admin/) with username admin, password rummikub.  Upload any items you wish to auction off.  Once you're ready, show bidders the QR code and they will be prompted to enter a username.  Bidding can begin.
 
 ## Prerequisites
 

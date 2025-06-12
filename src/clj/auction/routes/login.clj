@@ -3,11 +3,12 @@
     [auction.render :as render]
     [auction.service.qr :as qr]
     [auction.service.users :as users]
-    [ctmx.core :as ctmx]
-    [ctmx.response :as response]))
+    [auction.util :as util]
+    [simpleui.core :as simpleui]
+    [simpleui.response :as response]))
 
-(ctmx/defcomponent ^:endpoint username-prompt [req username]
-  (ctmx/with-req req
+(simpleui/defcomponent ^:endpoint username-prompt [req username]
+  (util/with-req req
     (if (-> "/code" value qr/password-match?)
       (if (and post? (users/add-user username))
         (assoc
@@ -22,7 +23,7 @@
       [:div "Invalid code"])))
 
 (defn login-routes []
-  (ctmx/make-routes
+  (simpleui/make-routes
     "/login"
     (fn [req]
       (render/html5-response
